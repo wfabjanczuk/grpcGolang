@@ -8,7 +8,7 @@ import (
 )
 
 func doSum(c pb.CalculatorServiceClient) {
-	log.Printf("doSum invoked")
+	log.Println("doSum invoked")
 	res, err := c.Sum(context.Background(), &pb.SumRequest{
 		FirstNumber:  3,
 		SecondNumber: 10,
@@ -21,7 +21,7 @@ func doSum(c pb.CalculatorServiceClient) {
 }
 
 func doPrimes(c pb.CalculatorServiceClient) {
-	log.Printf("doPrimes invoked")
+	log.Println("doPrimes invoked")
 
 	req := &pb.PrimesRequest{
 		Number: 210,
