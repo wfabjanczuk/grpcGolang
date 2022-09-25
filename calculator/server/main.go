@@ -24,6 +24,10 @@ func main() {
 
 	s := grpc.NewServer()
 	pb.RegisterCalculatorServiceServer(s, &Server{})
+
+	//uncomment for evans CLI
+	//reflection.Register(s)
+
 	err = s.Serve(lis)
 	if err != nil {
 		log.Fatalf("Failed to serve: %v\n", err)
