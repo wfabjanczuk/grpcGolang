@@ -1,0 +1,2 @@
+# greet
+protoc -I greet/proto --go_opt=module=github.com/wfabjanczuk/grpcGolang --go_out=. --go-grpc_out=. --go-grpc_opt=module=github.com/wfabjanczuk/grpcGolang greet/proto/dummy.proto
