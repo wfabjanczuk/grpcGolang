@@ -5,6 +5,7 @@ import (
 	pb "github.com/wfabjanczuk/grpcGolang/calculator/proto"
 	"io"
 	"log"
+	"time"
 )
 
 func doSum(c pb.CalculatorServiceClient) {
@@ -42,4 +43,32 @@ func doPrimes(c pb.CalculatorServiceClient) {
 
 		log.Printf("Primes: %d\n", msg.Factor)
 	}
+}
+
+func doAvg(c pb.CalculatorServiceClient) {
+	log.Println("doAvg invoked")
+	reqs := []*pb.AvgRequest{
+		{Number: 1},
+		{Number: 2},
+		{Number: 3},
+		{Number: 4},
+	}
+
+	stream, err := c.Avg(context.Background())
+	if err != nil {
+		log.Fatalf("Error while calling doAvg: %v\n", err)
+	}
+
+	for _, req := range reqs {
+		log.Printf("Sending req: %v\n", req)
+		stream.Send(req)
+		time.Sleep(1 * time.Second)
+	}
+
+	res, err := stream.CloseAndRecv()
+	if err != nil {
+		log.Fatalf("Error while receiving Avg: %s\n", err)
+	}
+
+	log.Printf("Avg: %f\n", res.Result)
 }
