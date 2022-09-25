@@ -6,14 +6,14 @@ import (
 	"log"
 )
 
-func doCalculate(c pb.CalculatorServiceClient) {
-	log.Printf("doCalculate invoked")
-	res, err := c.Calculate(context.Background(), &pb.CalculatorRequest{
+func doSum(c pb.CalculatorServiceClient) {
+	log.Printf("doSum invoked")
+	res, err := c.Sum(context.Background(), &pb.SumRequest{
 		FirstNumber:  3,
 		SecondNumber: 10,
 	})
 	if err != nil {
-		log.Fatalf("Could not calculate: %v\n", err)
+		log.Fatalf("Could not sum: %v\n", err)
 	}
 
 	log.Printf("Result: %d\n", res.Result)

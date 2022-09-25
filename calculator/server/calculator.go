@@ -6,9 +6,9 @@ import (
 	"log"
 )
 
-func (s *Server) Calculate(ctx context.Context, in *pb.CalculatorRequest) (*pb.CalculatorResponse, error) {
-	log.Printf("Calculate function invoked with %v\n", in)
-	return &pb.CalculatorResponse{
+func (s *Server) Sum(ctx context.Context, in *pb.SumRequest) (*pb.SumResponse, error) {
+	log.Printf("Sum function invoked with %v\n", in)
+	return &pb.SumResponse{
 		Result: in.FirstNumber + in.SecondNumber,
 	}, nil
 }
