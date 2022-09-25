@@ -2,9 +2,13 @@ package main
 
 import (
 	"context"
+	"fmt"
 	pb "github.com/wfabjanczuk/grpcGolang/calculator/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"io"
 	"log"
+	"math"
 )
 
 func (s *Server) Sum(ctx context.Context, in *pb.SumRequest) (*pb.SumResponse, error) {
@@ -92,4 +96,19 @@ func sendMaxResponse(max int64, stream pb.CalculatorService_MaxServer) {
 	if err != nil {
 		log.Fatalf("Error while sending data to client: %v\n", err)
 	}
+}
+
+func (s *Server) Sqrt(ctx context.Context, in *pb.SqrtRequest) (*pb.SqrtResponse, error) {
+	log.Printf("Sqrt invoked with %v\n", in)
+
+	if in.Number < 0 {
+		return nil, status.Errorf(
+			codes.InvalidArgument,
+			fmt.Sprintf("Received a negative number: %d", in.Number),
+		)
+	}
+
+	return &pb.SqrtResponse{
+		Result: math.Sqrt(float64(in.Number)),
+	}, nil
 }

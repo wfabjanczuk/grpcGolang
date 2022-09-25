@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	pb "github.com/wfabjanczuk/grpcGolang/calculator/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"io"
 	"log"
 	"time"
@@ -115,4 +117,27 @@ func doMax(c pb.CalculatorServiceClient) {
 	}()
 
 	<-waitc
+}
+
+func doSqrt(n int64, c pb.CalculatorServiceClient) {
+	log.Println("doSqrt invoked")
+	res, err := c.Sqrt(context.Background(), &pb.SqrtRequest{
+		Number: n,
+	})
+	if err != nil {
+		e, ok := status.FromError(err)
+		if ok {
+			log.Printf("Error message from server: %s\n", e.Message())
+			log.Printf("Error code from server: %d\n", e.Code())
+
+			if e.Code() == codes.InvalidArgument {
+				log.Println("Invalid argument")
+			}
+			return
+		} else {
+			log.Fatalf("Non gRPC error: %v\n", err)
+		}
+	}
+
+	log.Printf("Result: %f\n", res.Result)
 }
