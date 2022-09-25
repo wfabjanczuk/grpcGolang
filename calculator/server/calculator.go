@@ -55,3 +55,41 @@ func (s *Server) Avg(stream pb.CalculatorService_AvgServer) error {
 
 	return nil
 }
+
+func (s *Server) Max(stream pb.CalculatorService_MaxServer) error {
+	log.Println("Max invoked")
+
+	var count, max int64
+
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return nil
+		} else if err != nil {
+			log.Fatalf("Error while receiving client stream: %v\n", err)
+		}
+
+		log.Printf("Receiving: %v\n", req)
+		if count == 0 {
+			max = req.Number
+			sendMaxResponse(max, stream)
+		} else if req.Number > max {
+			max = req.Number
+			sendMaxResponse(max, stream)
+		}
+
+		count++
+	}
+
+	return nil
+}
+
+func sendMaxResponse(max int64, stream pb.CalculatorService_MaxServer) {
+	log.Printf("New maximum: %d\n", max)
+	err := stream.Send(&pb.MaxResponse{
+		Max: max,
+	})
+	if err != nil {
+		log.Fatalf("Error while sending data to client: %v\n", err)
+	}
+}

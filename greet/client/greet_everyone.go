@@ -39,6 +39,7 @@ func doGreetEveryone(c pb.GreetServiceClient) {
 				break
 			} else if err != nil {
 				log.Printf("Error while receiving: %v\n", err)
+				break
 			}
 			log.Printf("Received: %v\n", res)
 		}

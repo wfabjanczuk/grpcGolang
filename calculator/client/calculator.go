@@ -72,3 +72,47 @@ func doAvg(c pb.CalculatorServiceClient) {
 
 	log.Printf("Avg: %f\n", res.Result)
 }
+
+func doMax(c pb.CalculatorServiceClient) {
+	log.Println("doMax invoked")
+	reqs := []*pb.MaxRequest{
+		{Number: 1},
+		{Number: 5},
+		{Number: 3},
+		{Number: 6},
+		{Number: 2},
+		{Number: 20},
+	}
+
+	stream, err := c.Max(context.Background())
+	if err != nil {
+		log.Fatalf("Error while calling doMax: %v\n", err)
+	}
+
+	waitc := make(chan struct{})
+
+	go func() {
+		for _, req := range reqs {
+			log.Printf("Sending: %v\n", req)
+			stream.Send(req)
+			time.Sleep(1 * time.Second)
+		}
+		stream.CloseSend()
+	}()
+
+	go func() {
+		for {
+			res, err := stream.Recv()
+			if err == io.EOF {
+				break
+			} else if err != nil {
+				log.Printf("Error while receiving: %v\n", err)
+				break
+			}
+			log.Printf("Received: %v\n", res)
+		}
+		close(waitc)
+	}()
+
+	<-waitc
+}
