@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package calculator;
+
+option go_package = "github.com/wfabjanczuk/grpcGolang/calculator/proto";
+
+message PrimesRequest {
+  int64 number = 1;
+}
+
+message PrimesResponse {
+  int64 factor = 1;
+}
