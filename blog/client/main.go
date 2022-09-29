@@ -1,7 +1,7 @@
 package main
 
 import (
-	pb "github.com/wfabjanczuk/grpcGolang/calculator/proto"
+	pb "github.com/wfabjanczuk/grpcGolang/blog/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
@@ -16,12 +16,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	c := pb.NewCalculatorServiceClient(conn)
+	c := pb.NewBlogServiceClient(conn)
 
-	//doSum(c)
-	//doPrimes(c)
-	//doAvg(c)
-	//doMax(c)
-	doSqrt(10, c)
-	doSqrt(-1, c)
+	createBlog(c)
 }
