@@ -23,4 +23,6 @@ func main() {
 	//readBlog(c, "non-existing-id")
 	updateBlog(c, id)
 	//updateBlog(c, "non-existing-id")
+	listBlogs(c)
+	deleteBlog(c, id)
 }
